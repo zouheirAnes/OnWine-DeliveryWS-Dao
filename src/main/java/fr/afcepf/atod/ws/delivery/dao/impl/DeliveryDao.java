@@ -29,6 +29,11 @@ public class DeliveryDao implements IDeliveryDao, Serializable {
     private static final String REQFINDDELIVERYBYNAME = "SELECT d FROM"
             + " Delivery d WHERE d.name = :name";
     /**
+     * REQFINDDELIVERYBYNAME.
+     */
+    private static final String REQFINDDELIVERYBYNAMEQUANTITY = "SELECT d FROM"
+            + " Delivery d WHERE d.name = :name AND d.quantity = :paramQ";
+    /**
      * REQFINDALL.
      */
     private static final String REQFINDALL = "SELECT d FROM Delivery d";
@@ -118,6 +123,16 @@ private static final String REQDELETEALL = "DELETE FROM Delivery";
     public Delivery findByName(String paramName) throws DeliveriesWSException {
         Delivery d = null;
         d = (Delivery) em.createQuery(REQFINDDELIVERYBYNAME).setParameter("name", paramName).getSingleResult();
+        if (d == null) {
+            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE, "object Delivery not found");
+        }
+        return d;
+    }
+
+    @Override
+    public Delivery findByNameQuantity(String paramName, Integer paramQuantity) throws DeliveriesWSException {
+        Delivery d = null;
+        d = (Delivery) em.createQuery(REQFINDDELIVERYBYNAMEQUANTITY).setParameter("name", paramName).setParameter("paramQ", paramQuantity).getSingleResult();
         if (d == null) {
             throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE, "object Delivery not found");
         }

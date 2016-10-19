@@ -62,4 +62,6 @@ public interface IDeliveryDao {
      * @throws DeliveriesWSException custom exception
      */
     Delivery findByName(String paramName)    throws DeliveriesWSException;
+    
+    Delivery findByNameQuantity(String paramName, Integer paramQuantity)    throws DeliveriesWSException;
 }
