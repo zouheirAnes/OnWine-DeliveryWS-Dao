@@ -27,20 +27,20 @@ public class DeliveryDao implements IDeliveryDao, Serializable {
      * REQFINDDELIVERYBYNAME.
      */
     private static final String REQFINDDELIVERYBYNAME = "SELECT d FROM"
-            + " Delivery d WHERE d.name = :name";
+            + " delivery d WHERE d.name = :name";
     /**
      * REQFINDDELIVERYBYNAME.
      */
     private static final String REQFINDDELIVERYBYNAMEQUANTITY = "SELECT d FROM"
-            + " Delivery d WHERE d.name = :name AND d.quantity = :paramQ";
+            + " delivery d WHERE d.name = :name AND d.quantity = :paramQ";
     /**
      * REQFINDALL.
      */
-    private static final String REQFINDALL = "SELECT d FROM Delivery d";
+    private static final String REQFINDALL = "SELECT d FROM delivery d";
     /**
      * REQDELETEALL.
      */
-private static final String REQDELETEALL = "DELETE FROM Delivery";
+private static final String REQDELETEALL = "DELETE FROM delivery";
     /**
      * setting injected entity manager..
      */
@@ -115,7 +115,7 @@ private static final String REQDELETEALL = "DELETE FROM Delivery";
 
     @Override
     public Boolean deleteAllDeliveries() {
-        em.createQuery("DELETE FROM Delivery").executeUpdate();
+        em.createQuery("DELETE FROM delivery").executeUpdate();
         return true;
     }
 
