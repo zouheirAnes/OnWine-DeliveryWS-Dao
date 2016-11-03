@@ -15,6 +15,7 @@ import fr.afcepf.atod.ws.delivery.exception.DeliveriesWSException;
 
 /**
  * Concrete implementation of Delivery DAO.
+ * 
  * @author Zouheir
  *
  */
@@ -26,13 +27,12 @@ public class DeliveryDao implements IDeliveryDao, Serializable {
     /**
      * REQFINDDELIVERYBYNAME.
      */
-    private static final String REQFINDDELIVERYBYNAME = "SELECT d FROM"
-            + " delivery d WHERE d.name = :name";
+    private static final String REQFINDDELIVERYBYNAME = "SELECT d FROM" + " delivery d WHERE d.name = :name";
     /**
      * REQFINDDELIVERYBYNAME.
      */
-    private static final String REQFINDDELIVERYBYNAMEQUANTITY = "SELECT d FROM"
-            + " delivery d WHERE d.name = :name AND d.quantity = :paramQ";
+    private static final String REQFINDDELIVERYBYCODEQUANTITY = "SELECT d FROM"
+            + " delivery d WHERE d.codePays = :paramC AND d.quantity = :paramQ";
     /**
      * REQFINDALL.
      */
@@ -40,7 +40,7 @@ public class DeliveryDao implements IDeliveryDao, Serializable {
     /**
      * REQDELETEALL.
      */
-private static final String REQDELETEALL = "DELETE FROM delivery";
+    private static final String REQDELETEALL = "DELETE FROM delivery";
     /**
      * setting injected entity manager..
      */
@@ -56,9 +56,7 @@ private static final String REQDELETEALL = "DELETE FROM delivery";
         if (paramD != null) {
             em.persist(paramD);
         } else {
-            throw new DeliveriesWSException(
-                    DeliveriesWSError.IMPOSSIBLE_AJOUT_DANS_BASE,
-                    "object creation failed");
+            throw new DeliveriesWSException(DeliveriesWSError.IMPOSSIBLE_AJOUT_DANS_BASE, "object creation failed");
         }
         return paramD;
     }
@@ -66,13 +64,14 @@ private static final String REQDELETEALL = "DELETE FROM delivery";
     @Override
     public Boolean update(Delivery paramD) throws DeliveriesWSException {
         Boolean retour = false;
-        if (paramD != null){
-            if (em.merge(paramD) != null){
+        if (paramD != null) {
+            if (em.merge(paramD) != null) {
                 retour = true;
             }
         }
         if (!retour) {
-            throw new DeliveriesWSException(DeliveriesWSError.UPDATE_NON_EFFECTUE_EN_BASE,"object Delivery update failed");
+            throw new DeliveriesWSException(DeliveriesWSError.UPDATE_NON_EFFECTUE_EN_BASE,
+                    "object Delivery update failed");
         }
         return retour;
     }
@@ -85,7 +84,8 @@ private static final String REQDELETEALL = "DELETE FROM delivery";
             retour = true;
         }
         if (!retour) {
-            throw new DeliveriesWSException(DeliveriesWSError.IMPOSSIBLE_SUPPRESSION_DANS_BASE, "object Delivery removal failed");
+            throw new DeliveriesWSException(DeliveriesWSError.IMPOSSIBLE_SUPPRESSION_DANS_BASE,
+                    "object Delivery removal failed");
         }
         return retour;
     }
@@ -95,7 +95,8 @@ private static final String REQDELETEALL = "DELETE FROM delivery";
         Delivery d = null;
         d = em.find(Delivery.class, paramId);
         if (d == null) {
-            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE, "object Delivery not found");
+            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE,
+                    "object Delivery not found");
         }
         return d;
     }
@@ -103,11 +104,9 @@ private static final String REQDELETEALL = "DELETE FROM delivery";
     @Override
     public List<Delivery> findAll() throws DeliveriesWSException {
         List<Delivery> liste = new ArrayList<Delivery>();
-        liste = em.createNamedQuery("delivery.findAll", Delivery.class)
-                .getResultList();
+        liste = em.createNamedQuery("delivery.findAll", Delivery.class).getResultList();
         if (liste.isEmpty()) {
-            throw new DeliveriesWSException(
-                    DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE,
+            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE,
                     "object Delivery not found");
         }
         return liste;
@@ -124,17 +123,20 @@ private static final String REQDELETEALL = "DELETE FROM delivery";
         Delivery d = null;
         d = (Delivery) em.createQuery(REQFINDDELIVERYBYNAME).setParameter("name", paramName).getSingleResult();
         if (d == null) {
-            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE, "object Delivery not found");
+            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE,
+                    "object Delivery not found");
         }
         return d;
     }
 
     @Override
-    public Delivery findByNameQuantity(String paramName, Integer paramQuantity) throws DeliveriesWSException {
+    public Delivery findByCodeQuantity(String paramCode, Integer paramQuantity) throws DeliveriesWSException {
         Delivery d = null;
-        d = (Delivery) em.createQuery(REQFINDDELIVERYBYNAMEQUANTITY).setParameter("name", paramName).setParameter("paramQ", paramQuantity).getSingleResult();
+        d = (Delivery) em.createQuery(REQFINDDELIVERYBYCODEQUANTITY).setParameter("paramC", paramCode)
+                .setParameter("paramQ", paramQuantity).getSingleResult();
         if (d == null) {
-            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE, "object Delivery not found");
+            throw new DeliveriesWSException(DeliveriesWSError.RECHERCHE_NON_PRESENTE_EN_BASE,
+                    "object Delivery not found");
         }
         return d;
     }
